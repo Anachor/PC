@@ -1,0 +1,11 @@
+# circuit for equality check ((a & b) | (~a & ~b))
+term a
+term b
+
+not a na
+not b nb
+and a b ab
+and na nb nanb
+or ab nanb out
+
+output out
