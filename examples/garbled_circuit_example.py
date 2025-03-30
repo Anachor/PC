@@ -3,13 +3,12 @@ from circuits.circuit import Circuit
 from circuits.elements import Terminal, NotGate, OrGate, AndGate
 from garbled_circuits.garbled_circuit import GarbledCircuit
 
+### a < b  ---->     (~a1 & b1) | (  ((a1 & b1) | (~a1 & ~b1)) & (~a0 & b0) )
 
 a0 = Terminal("a0")
 a1 = Terminal("a1")
 b0 = Terminal("b0")
 b1 = Terminal("b1")
-
-### a < b  ---->     (~a1 & b1) | (  ((a1 & b1) | (~a1 & ~b1)) & (~a0 & b0) )
 
 na0 = NotGate(a0)
 na1 = NotGate(a1)

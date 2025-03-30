@@ -28,7 +28,8 @@ print()
 
 ### Read a circuit from a file
 with open("equality_circuit.txt", "r") as f:
-    eq_circuit = Circuit.read_circuit(f)
+    description = f.read()
+    eq_circuit = Circuit.deserialize(description)
     terminals = eq_circuit.terminals
 
     print(f"Circuit: {eq_circuit}")

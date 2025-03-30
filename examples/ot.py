@@ -6,7 +6,7 @@ m = 'Text'.encode('utf-8')
 n = int(input("n: "))
 messages = []
 for i in range(int(n)):
-    message = input(f"message m[{i}]: ")
+    message = input(f"message m[{i}]: ").encode('utf-8')
     messages.append(message)
 
 c = int(input(f"c: (0-{n-1}): "))
@@ -19,6 +19,6 @@ ciphertexts = ot.alice_ot1(messages, bob_keys)
 print(f"Alice -> Bob: {ciphertexts}")
 
 m_c = ot.bob_ot2(c, sk, ciphertexts)
-print(f"Bob's message: {m_c.decode('utf-8')}")
+print(f"Bob's message: {m_c}")
 
 

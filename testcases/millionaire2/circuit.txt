@@ -1,0 +1,43 @@
+term a0
+term a1
+term b0
+term b1
+
+# nai = not ai, bi = not bi
+NOT a0 na0
+NOT a1 na1
+NOT b0 nb0
+NOT b1 nb1
+
+# gi = (ai > bi)
+AND a0 nb0 g0
+AND a1 nb1 g1
+
+# eqi1 = (ai == bi == 1)
+AND a0 b0 eq01
+AND a1 b1 eq11
+
+# eqi0 = (ai == bi == 0)
+AND na0 nb0 eq00
+AND na1 nb1 eq10
+
+# eqi = (ai == bi)
+OR eq00 eq01 eq0
+OR eq10 eq11 eq1
+
+# eq = (a == b)
+AND eq0 eq1 eq
+
+# G1 = (a1 == b1) and (a0 > b0)
+AND eq1 g0 G1
+
+# g = (a > b)
+OR g0 G1 g
+
+# geq = (a >= b)
+OR g eq geq
+
+output geq
+
+a0 a1
+b0 b1

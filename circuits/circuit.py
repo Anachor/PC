@@ -51,7 +51,7 @@ class Circuit:
         """
 
         return self.__dfs_simplify(self.output, assignments)
-        
+
         
     def __dfs_simplify(self, node, assignments):
         """
@@ -63,37 +63,35 @@ class Circuit:
             simplified_inputs = [self.__dfs_simplify(input, assignments) for input in node.inputs]
             return node.simplify(*simplified_inputs)
 
-
     @staticmethod
-    def read_circuit(stream):
+    def deserialize(description: str):
         """
-        Reads a circuit from a file.
+          Deserializes string to a Circuit object.
 
-        Circuit file format:
-        - Each line represents a gate or terminal.
-            - A terminal is represented in the following format: term identifier
-            - A gate is represented in the following format: (gate_type input1 input2 ... inputN identifier)
-        - The representation ends with a line in the format: output identifier
-            - identifier is the identifier of the output terminal or gate.
-            - All subsequent lines are not consumed from the file.
-        - Empty lines or lines starting with '#' are ignored.
+          Format:
+          - Each line represents a gate or terminal.
+              - A terminal is represented in the following format: term identifier
+              - A gate is represented in the following format: (gate_type input1 input2 ... inputN identifier)
+          - The representation ends with a line in the format: output identifier
+              - identifier is the identifier of the output terminal or gate.
+              - All subsequent lines are ignored.
+          - Empty lines or lines starting with '#' are ignored.
 
-        Example:
-            term a
-            term b
-            and a b g1
-            term c
-            not c g2
-            or g1 g2 g3
-            output g3
-        """
+          Example:
+              term a
+              term b
+              and a b g1
+              term c
+              not c g2
+              or g1 g2 g3
+              output g3
+          """
 
         mapper = {}
         terminals = []
         output = None
 
-        for line in stream.readlines():
-            line = line.strip()
+        for line in description.split('\n'):
             if line.startswith('#') or not line:
                 continue
 
@@ -152,15 +150,15 @@ class Circuit:
             if input not in mapper:
                 raise ValueError(f"Input identifier not found: {input}")
 
-        if gate_type == 'and':
+        if gate_type.lower() == 'and':
             if len(inputs) != 2:
                 raise ValueError("AND gate requires exactly 2 inputs")
             gate = AndGate(mapper[inputs[0]], mapper[inputs[1]])
-        elif gate_type == 'or':
+        elif gate_type.lower() == 'or':
             if len(inputs) != 2:
                 raise ValueError("OR gate requires exactly 2 inputs")
             gate = OrGate(mapper[inputs[0]], mapper[inputs[1]])
-        elif gate_type == 'not':
+        elif gate_type.lower() == 'not':
             if len(inputs) != 1:
                 raise ValueError("NOT gate requires exactly 1 input")
             gate = NotGate(mapper[inputs[0]])
