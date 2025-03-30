@@ -1,1 +1,3 @@
-pycryptodome
+pycryptodome==3.22.0
+pycryptodomex==3.22.0
+elgamal==0.0.5

@@ -3,6 +3,8 @@ from itertools import product
 from circuits.circuit import Circuit
 from circuits.elements import Terminal, NotGate, AndGate, OrGate
 
+from elgamal.elgamal import Elgamal
+
 
 ### Define circuits programmatically
 a = Terminal("a")
@@ -27,7 +29,7 @@ print()
 
 
 ### Read a circuit from a file
-with open("circuit_example.txt", "r") as f:
+with open("equality_circuit.txt", "r") as f:
     eq_circuit = Circuit.read_circuit(f)
     terminals = eq_circuit.terminals
 
