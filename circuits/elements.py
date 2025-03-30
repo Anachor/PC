@@ -35,6 +35,14 @@ class Gate:
 
         raise NotImplemented("Subclasses should implement")
 
+    @staticmethod
+    def truth_table():
+        """
+        Returns the truth table of the gate as a list.
+        For example, the truth table of an AND gate is [0, 0, 0, 1].
+        """
+        raise NotImplemented("Subclasses should implement")
+
 
 class NotGate(Gate):
     def __init__(self, input):
@@ -48,6 +56,10 @@ class NotGate(Gate):
             return not input
         else:
             return NotGate(input)
+
+    @staticmethod
+    def truth_table():
+        return [1, 0]
 
 
 class AndGate(Gate):
@@ -73,6 +85,10 @@ class AndGate(Gate):
         else:
             return AndGate(input1, input2)
 
+    @staticmethod
+    def truth_table():
+        return [0, 0, 0, 1]
+
 
 class OrGate(Gate):
     def __init__(self, input1, input2):
@@ -96,3 +112,7 @@ class OrGate(Gate):
                 return input1
         else:
             return OrGate(input1, input2)
+
+    @staticmethod
+    def truth_table():
+        return [0, 1, 1, 1]

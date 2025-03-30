@@ -3,8 +3,6 @@ from itertools import product
 from circuits.circuit import Circuit
 from circuits.elements import Terminal, NotGate, AndGate, OrGate
 
-from elgamal.elgamal import Elgamal
-
 
 ### Define circuits programmatically
 a = Terminal("a")
