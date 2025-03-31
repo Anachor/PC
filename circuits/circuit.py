@@ -1,4 +1,5 @@
-from circuits.elements import Terminal, NotGate, AndGate, OrGate
+from circuits.elements import Terminal, NotGate, AndGate, OrGate, BufferGate
+
 
 class Circuit:
     """
@@ -162,6 +163,10 @@ class Circuit:
             if len(inputs) != 1:
                 raise ValueError("NOT gate requires exactly 1 input")
             gate = NotGate(mapper[inputs[0]])
+        elif gate_type.lower() == 'buffer':
+            if len(inputs) != 1:
+                raise ValueError("Buffer gate requires exactly 1 input")
+            gate = BufferGate(mapper[inputs[0]])
         else:
             raise ValueError(f"Unsupported gate type: {gate_type}")
 

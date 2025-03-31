@@ -69,6 +69,24 @@ class NotGate(Gate):
         return [1, 0]
 
 
+class BufferGate(Gate):
+    def __init__(self, input):
+        super().__init__(input)
+
+    def __str__(self):
+        return f"{self.inputs[0]}"
+
+    def simplify(self, input):
+        if type(input) == bool:
+            return input
+        else:
+            return BufferGate(input)
+
+    @staticmethod
+    def truth_table():
+        return [0, 1]
+
+
 class AndGate(Gate):
     def __init__(self, input1, input2):
         super().__init__(input1, input2)

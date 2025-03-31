@@ -1,0 +1,37 @@
+# Mux Circuit
+# Takes a 2 bit number b = b1b0 and 4 inputs a0, a1, a2, a3 and outputs a[b]
+# Example: (a0, a1, a2, a3) = (0, 1, 0, 1), b = 10, output = a2 = 0
+
+term a0
+term a1
+term a2
+term a3
+
+term b0
+term b1
+
+NOT b0 nb0
+NOT b1 nb1
+
+# eqi = (b == i)
+AND nb0 nb1 eq0
+AND b0 nb1 eq1
+AND nb0 b1 eq2
+AND b0 b1 eq3
+
+
+# vi = (b == i) and ai
+AND eq0 a0 v0
+AND eq1 a1 v1
+AND eq2 a2 v2
+AND eq3 a3 v3
+
+
+OR v0 v1 v01
+OR v2 v3 v23
+OR v01 v23 out
+
+output out
+
+a0 a1 a2 a3
+b0 b1

@@ -1,3 +1,6 @@
+# Millionaire's Problem for 2 bit numbers
+# Compare two 2 bit numbers a = a1a0 and b = b1b0 and evaluate a >= b
+
 term a0
 term a1
 term b0
