@@ -89,5 +89,15 @@ If we are running both scripts on the same machine, we can use the script `run.s
 First we put the three files in the same directoory and name them as `circuit.txt`, `bob.txt` and `alice.txt`. 
 Then we run the script as follows:
 ```./run.sh <port> <directory>```
-```
+
+## Testcases:
+There are three testcases in the `testcases` directory. 
+- `millionaire2` is the millionaire problem with 2 bits.
+- `millionaire4` is the millionaire problem with 4 bits.
+- `mux` is a simple 4 bit multiplexer.
+
+Example:
+```./run.sh 12345 testcases/millionaire2```
+
+
 
