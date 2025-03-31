@@ -1,5 +1,4 @@
 from oblivious_transfer.oblivious_transfer import ObliviousTransfer
-
 from elgamal.elgamal import Elgamal
 
 m = 'Text'.encode('utf-8')

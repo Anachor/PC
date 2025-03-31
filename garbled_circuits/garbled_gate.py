@@ -1,4 +1,7 @@
 from __future__ import annotations
+
+import secrets
+import string
 from typing import Self, List, Dict, Tuple
 from Crypto.Hash import SHA256
 from circuits.elements import Gate, Terminal
@@ -14,20 +17,21 @@ class GarbledGate:
     def __init__(self, inputs: List[Self | Terminal], truth_table: Dict[bytes, Tuple[bytes, bytes]]):
         self.inputs = inputs
         self.truth_table = truth_table
+        self.identifier = ''.join(secrets.choice(string.ascii_lowercase) for _ in range(8))
 
     @staticmethod
-    def construct_from_gate(gate: Gate, inputs: List[GarbledGate | Terminal | bool],
-                        pin: List[List[bytes]], pout: List[bytes] = None) -> GarbledGate:
+    def garble(gate: Gate, inputs: List[GarbledGate | Terminal | bool],
+               pin: List[List[bytes]], pout: List[bytes] | None) -> GarbledGate:
         """
-        Construct a garbled gate given the six passwords and the underlying gate + inputs.
-        gate is the underlying gate
-        inputs is a list of garbled gates/terminals/bool
-        Each element in pin is a list of two passwords
-        pin[i] is a list of two passwords for the ith input, one for 0 and one for 1
-        If the ith input is a boolean, we do not need the passwords for it., pin[i] is ignored (should be None)
-        pout is a list of two passwords for the output, one for 0 and one for 1
-        if pout is None, then True/False is used as the output
-        Each password is a byte array of length 8
+        Construct a garbled gate given the input and output passwords and the underlying gate + inputs.
+
+        - gate is the underlying gate
+        - inputs is a list of garbled gates/terminals/bool
+        - Each element in pin is a list of two passwords
+            - pin[i] is a list of two passwords for the ith input, one for 0 and one for 1
+            - If the ith input is a boolean, we do not need the passwords for it., pin[i] is ignored (should be None)
+        - pout is a list of two passwords for the output, one for 0 and one for 1
+            -if pout is None, then True/False is used as the output
         """
 
 
@@ -36,11 +40,12 @@ class GarbledGate:
         reduced_truth_table = GarbledGate.reduce_truth_table(truth_table, assignments)
 
         reduced_inputs = [inputs[i] for i in range(len(inputs)) if type(inputs[i]) != bool]
+        reduces_idxs = [ i for i in range(len(inputs)) if type(inputs[i]) != bool]
         garbled_truth_table = {}
 
-        k = len(inputs) - len(assignments)
+        k = len(reduced_inputs)
         for mask in range(1 << k):
-            key = b''.join(pin[i][mask >> i & 1] for i in range(k))
+            key = b''.join(pin[reduces_idxs[i]][mask >> i & 1] for i in range(k))
             hashed_key = SHA256.new(data=key).digest()
 
             val = reduced_truth_table[mask] if pout is None else pout[reduced_truth_table[mask]]
@@ -50,9 +55,11 @@ class GarbledGate:
             cipher = Salsa20.new(encryption_key)
             ct = cipher.encrypt(val)
             nonce = cipher.nonce
-            garbled_truth_table[hashed_key] = (nonce, ct)
+            garbled_truth_table[hashed_key] = (ct, nonce)
 
-        return GarbledGate(reduced_inputs, garbled_truth_table)
+        garbled_gate = GarbledGate(reduced_inputs, garbled_truth_table)
+        return garbled_gate
+
 
 
     def evaluate(self, pin:List[bytes]) -> bytes|bool:
@@ -60,6 +67,7 @@ class GarbledGate:
         Evaluate the garbled gate given the passwords for each input.
         pin is a list of passwords for each input.
         """
+
         key = b''.join(pin[i] for i in range(len(pin)))
         key = SHA256.new(data=key).digest()
 
@@ -99,7 +107,7 @@ class GarbledGate:
         if the byte array is of length 1, convert it to a boolean value.
         Otherwise, return the byte array.
         """
-        return val if len(val) == 1 else val
+        return bool(val[0]) if len(val) == 1 else val
 
     @staticmethod
     def reduce_truth_table(truth_table: List[bool], assignments: List[bool | None]) -> List[bool]:
@@ -119,11 +127,12 @@ class GarbledGate:
         if len(truth_table) != 1 << n:
             raise ValueError("Invalid truth table length")
 
-        free_vars = [i for i in range(k) if assignments[i] is None]
-        set_bits = sum(1 << i for i in range(k) if assignments[i] is True)
-        reduced_truth_table = [False] * (1 << len(free_vars))
+        free_vars = [i for i in range(n) if assignments[i] is None]
+        set_bits = sum(1 << i for i in range(n) if assignments[i] is True)
 
         k = len(free_vars)
+        reduced_truth_table = [False] * (1 << k)
+
         for mask in range(1 << k):
             full_mask = sum(1<<free_vars[i] for i in range(k) if mask & (1 << i)) | set_bits
             reduced_truth_table[mask] = truth_table[full_mask]

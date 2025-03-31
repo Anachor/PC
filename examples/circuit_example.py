@@ -42,5 +42,3 @@ with open("equality_circuit.txt", "r") as f:
         assigment_str = ", ".join(f"{t}={v}" for t, v in assigment.items())
         print(f"Assignment: {assigment_str} =>  Simplified = {simplified}")
 
-print()
-
