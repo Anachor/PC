@@ -9,9 +9,12 @@ To run the scripts, we will need three files as input:
 
 ### 1.  circuit_file
 
-This file contains the circuit to be computed. It also contains which inputs are assigned to alice and bob
+This file contains the circuit to be computed. It also contains which inputs are assigned to Alice and which to Bob.
 
-**Format**:
+<details>
+
+<summary>Format</summary>
+
 - The file starts with a description of the circuit
     - Each line contains a gate or a terminal (A terminal simply means a input)
     - terminals are represented as `term <name>`.
@@ -28,7 +31,11 @@ This file contains the circuit to be computed. It also contains which inputs are
 - Empty lines and lines starting with `#` are ignored. So, we can add comments to the file using `#`
 - Allowed gates are and, or, not.
 
-**Example**:
+</details>
+
+<details open>
+<summary>Example</summary>
+
   ```
   # This is a comment
   term a0
@@ -46,6 +53,9 @@ This file contains the circuit to be computed. It also contains which inputs are
   a0 a1
   b0 b1
   ```
+
+</details>
+
 
 ### 2. alice_assignment_file
 
