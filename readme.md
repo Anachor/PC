@@ -9,7 +9,7 @@ To run the scripts, we will need three files as input:
 
 ### 1.  circuit_file
 
-This file contains the circuit to be computed. In addition, it also contains which inputs are assigned to alice and bob
+This file contains the circuit to be computed. It also contains which inputs are assigned to alice and bob
 
 **Format**:
 - The file starts with a description of the circuit
@@ -49,20 +49,19 @@ This file contains the circuit to be computed. In addition, it also contains whi
 
 ### 2. alice_assignment_file
 
-This file contains the values assigned to alice's inputs
+This file contains the values assigned to alice's inputs. It should contain assignments for all inputs assigned to alice in the circuit file.
 
 **Format**: Each line contains `input_name value`. Empty lines and lines starting with `#` are ignored.
 
 **Example**:
-    ```
-    a0 1
-    a1 0
-    ```
+
+```
+a0 1
+a1 0
+```
   
 ### 3. bob_assignment_file
-Similar to `alice_assignment_file`, but for bob's inputs. Every input must be in one of the two files. 
-
-
+Similar to `alice_assignment_file`, but for bob's inputs. 
 ## Scripts
 There are two scripts to run:
 ### 1. **bob.py**

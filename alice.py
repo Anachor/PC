@@ -38,17 +38,21 @@ def generate_passwords(terminals):
         t: [GarbledCircuit.random_password(), GarbledCircuit.random_password()]
         for t in terminals
     }
+
     return passwords
 
-def alice2bob(circuit, alice_assignment, keys, bob_terminals):
+def alice2bob(circuit, alice_assignment, keys, bob_terminals, verbose=False):
     if len(keys) != len(bob_terminals):
         raise ValueError("Bob asked for incorrect number of passwords")
 
     passwords = generate_passwords(bob_terminals)
     garbled_circuit = GarbledCircuit.garble(circuit, alice_assignment, passwords)
 
+    if verbose:
+        print(f"{script_name} | Passwords: {passwords}")
+
     ot = ObliviousTransfer(2)
-    ciphertexts = [ot.alice_ot1(passwords[t], keys[i]) for i, t in enumerate(bob_terminals)]
+    ciphertexts = [ot.alice_ot1(passwords[t], keys[i]) for i, t in enumerate(sorted(bob_terminals))]
     message = (ciphertexts, garbled_circuit)
     return message
 
@@ -67,6 +71,6 @@ if __name__ == '__main__':
     keys = read_object(connection, verbose=verbose)
 
     # Round 2: Alice -> Bob
-    message = alice2bob(circuit, alice_assignment, keys, bob_terminals)
+    message = alice2bob(circuit, alice_assignment, keys, bob_terminals, verbose=verbose)
     send_object(connection, message, verbose=verbose)
 

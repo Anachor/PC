@@ -63,13 +63,8 @@ OR greater_at3 greater_at2 temp0
 OR greater_at1 greater_at0 temp1
 OR temp0 temp1 g
 
-# eq = (a == b)
-OR prefix_eq3 prefix_eq2 temp2
-OR prefix_eq1 prefix_eq0 temp3
-OR temp2 temp3 eq
-
 # geq = (a >= b)
-OR g eq geq
+OR g prefix_eq0 geq
 
 output geq
 

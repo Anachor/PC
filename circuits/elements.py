@@ -1,3 +1,7 @@
+import functools
+
+
+@functools.total_ordering
 class Terminal:
     """
     Represents an input terminal in a circuit.
@@ -9,6 +13,9 @@ class Terminal:
     def __str__(self):
         return self.name
 
+    def __repr__(self):
+        return f"Terminal({self.name})"
+
     def __hash__(self):
         return hash(self.name)
 
@@ -16,6 +23,11 @@ class Terminal:
         if isinstance(other, Terminal):
             return self.name == other.name
         return False
+
+    def __lt__(self, other):
+        if isinstance(other, Terminal):
+            return self.name < other.name
+        return NotImplemented
 
 class Gate:
     """

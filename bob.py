@@ -34,7 +34,7 @@ def bob2alice(circuit, bob_assignment):
 
     keys = []
     sks = []
-    for t, v in bob_assignment.items():
+    for t, v in sorted(bob_assignment.items()):
         b, sk = ot.bob_ot1(v)
         keys.append(b)
         sks.append(sk)
@@ -42,18 +42,21 @@ def bob2alice(circuit, bob_assignment):
     return keys, sks
 
 def recover_passwords(ciphertexts, sks, bob_assignment, verbose=False):
-    ot = ObliviousTransfer(2)
     if len(keys) != len(bob_assignment) or len(ciphertexts) != len(bob_assignment):
         raise ValueError("Incorrect number of passwords")
 
     ot = ObliviousTransfer(2)
     input_passwords = {}
-    for i, (terminal, assignment) in enumerate(bob_assignment.items()):
+    for i, (terminal, assignment) in enumerate(sorted(bob_assignment.items())):
         c = int(assignment)
         passwords = ciphertexts[i]
         sk = sks[i]
         password = ot.bob_ot2(c, sk, passwords)
         input_passwords[terminal] = password
+
+    if verbose:
+        print(f"{script_name} | Recovered passwords: {input_passwords}")
+
     return input_passwords
 
 

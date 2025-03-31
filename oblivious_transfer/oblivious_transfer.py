@@ -38,7 +38,7 @@ class ObliviousTransfer:
         return [Elgamal.encrypt(messages[i], bob_keys[i]) for i in range(self.n)]
 
     def bob_ot2(self, c, sk, ciphertexts):
-        return Elgamal.decrypt(ciphertexts[c], sk)
+        return bytes(Elgamal.decrypt(ciphertexts[c], sk))
 
 
 

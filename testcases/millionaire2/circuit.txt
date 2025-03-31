@@ -31,11 +31,11 @@ OR eq10 eq11 eq1
 # eq = (a == b)
 AND eq0 eq1 eq
 
-# G1 = (a1 == b1) and (a0 > b0)
-AND eq1 g0 G1
+# G0 = (a1 == b1) and (a0 > b0)
+AND eq1 g0 G0
 
 # g = (a > b)
-OR g0 G1 g
+OR g1 G0 g
 
 # geq = (a >= b)
 OR g eq geq

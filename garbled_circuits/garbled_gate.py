@@ -87,9 +87,9 @@ class GarbledGate:
         Shorten a byte array to n bytes
         """
         ans = bytearray(n)
-        for i in range(n):
-            ans[i] ^= b[i]
-        return ans
+        for i in range(len(b)):
+            ans[i % n] ^= b[i]
+        return bytes(ans)
 
     @staticmethod
     def _to_bytes(val: bool | bytes) -> bytes:
