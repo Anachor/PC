@@ -80,15 +80,6 @@ Here ip and port are the ip and port of bob.py.
 
 **Example**: `python alice.py localhost 12345 circuit.txt alice.txt --verbose`
 
-
-
-### **run.sh**
-If we are running both scripts on the same machine, we can use the script `run.sh` to run both scripts in parallel.
-
-First we put the three files in the same directoory and name them as `circuit.txt`, `bob.txt` and `alice.txt`. 
-Then we run the script as follows:
-```./run.sh <port> <directory>```
-
 ## Testcases:
 There are three testcases in the `testcases` directory. 
 - `millionaire2` is the millionaire problem with 2 bits.
@@ -100,3 +91,24 @@ Example:
 
 
 
+## Quick Testing Scripts
+
+### **run.sh**
+If we are running both scripts on the same machine, we can use the script `run.sh` to run both scripts in parallel.
+
+First we put the three files in the same directoory and name them as `circuit.txt`, `bob.txt` and `alice.txt`. 
+Then we run the script as follows:
+```./run.sh <port> <directory>```
+
+### **stresstester.py**
+This script can be used to test the protocol for multiple assignments.
+
+For each possible assignment of the inputs, the script will calculate the output of the circuit using two methods: 
+direct evaluation of the circuit and garbled circuit protocol using alice.py and bob.py
+and report if the outputs differ for any assignment.
+
+Usage: ```python stresstester.py <testcase_folder> <port> [iterations]```
+Example: ```python stresstester.py testcases/millionaire2 12345 10```
+
+This will run the protocol for 10 random assignments for the 2 bit millionaire problem.
+If no iterations are provided, it will run for all possible assignments.
