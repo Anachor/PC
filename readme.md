@@ -1,6 +1,6 @@
 ## Setup
 -  Install dependencies:
-``python manege.py -r requirements.txt``
+``pip install -r requirements.txt``
 
 ## Input Format
 
@@ -13,15 +13,15 @@ This file contains the circuit to be computed. It also contains which inputs are
 
 **Format**:
 - The file starts with a description of the circuit
-    - Each line contains a gate or a terminal (A terminal simoly means a input)
+    - Each line contains a gate or a terminal (A terminal simply means a input)
     - terminals are represented as `term <name>`.
     - gates are represented as 
        - binary gates: `<gate_type> <input1> <input2> <identifier>` 
        - unary gates: `<gate_type> <input> <identifier>`
        - `identifier` is an identifier for the gate used for later inputs
-       - each input should be a previusly defined terminal or gate 
+       - each `<input>` should be a previusly defined terminal or gate 
 - The gate description ends with a line describing the output in the format `output <identifier>`
-   - `identifier` is the identifier of the gate that produces the output and must be a previously defined gate
+   - `identifier` is the identifier of the gate that produces the output and must be previously defined.
 - Finally, the file ends with two lines:
    - `a1 a2 ... an` where `a0`, `a1`, `a2` are the identifiers of the inputs assigned to alice
    - `b1 b2 ... bm` where `b0`, `b1`, `b2` are the identifiers of the inputs assigned to bob
@@ -80,17 +80,6 @@ Here ip and port are the ip and port of bob.py.
 
 **Example**: `python alice.py localhost 12345 circuit.txt alice.txt --verbose`
 
-## Testcases:
-There are three testcases in the `testcases` directory. 
-- `millionaire2` is the millionaire problem with 2 bits.
-- `millionaire4` is the millionaire problem with 4 bits.
-- `mux` is a simple 4 bit multiplexer.
-
-Example:
-```./run.sh 12345 testcases/millionaire2```
-
-
-
 ## Quick Testing Scripts
 
 ### **run.sh**
@@ -112,3 +101,16 @@ Example: ```python stresstester.py testcases/millionaire2 12345 10```
 
 This will run the protocol for 10 random assignments for the 2 bit millionaire problem.
 If no iterations are provided, it will run for all possible assignments.
+
+
+## Testcases:
+There are three testcases in the `testcases` directory. 
+- `millionaire2` is the millionaire problem with 2 bits.
+- `millionaire4` is the millionaire problem with 4 bits.
+- `mux` is a simple 4 bit multiplexer.
+
+Example:
+```./run.sh 12345 testcases/millionaire2```
+
+
+
