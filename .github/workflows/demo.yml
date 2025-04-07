@@ -1,0 +1,88 @@
+# This workflow demonstrates the implementation of garbled circuits.
+# Inputs:
+# - testcase: The name of the test case to run (e.g., millionaire2, millionaire4, mux).
+#             There should be a corresponding folder in the testcases directory.
+#             There are three test cases already available: millionaire2, millionaire4, and mux.
+# - alice_inputs: The input assignments for Alice. This should be a string with each line
+#                 representing a variable assignment (e.g., "a0 1\na1 0").
+# - bob_inputs: The input assignments for Bob. This should be a string with each line
+#                representing a variable assignment (e.g., "b0 1\nb1 1").
+# 
+
+
+
+name: Garbled Circuits Demonstration
+
+
+on:
+  workflow_dispatch:
+    inputs:
+      testcase:
+        description: 'Testcase name (millionaire2/millionaire4/mux)'
+        required: true
+        default: 'millionaire2'
+      alice_inputs:
+        description: 'Alice input assignments (e.g., "a1 1\na0 0")'
+        required: true
+        default: 'a1 1\na0 0'
+      bob_inputs:
+        description: 'Bob input assignments (e.g., "b1 1\nb0 1")'
+        required: true
+        default: 'b1 1\nb0 1'
+      verbose:
+        description: 'Enable verbose output (true/false)'
+        required: false
+        default: 'true'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+
+        
+    - name: Setup testcase
+      run: |
+        chmod +x run.sh
+        mkdir temp_case
+        cp testcases/${{ github.event.inputs.testcase }}/* temp_case/
+        echo -e "${{ github.event.inputs.alice_inputs }}" > temp_case/alice.txt
+        echo -e "${{ github.event.inputs.bob_inputs }}" > temp_case/bob.txt
+
+    - name: Run alice.py and bob.py
+      run: |
+        FLAG=""
+        if [ "${{ github.event.inputs.verbose }}" = "true" ]; then FLAG="--verbose"; fi
+
+        PORT=12345
+        CIRCUIT="temp_case/circuit.txt"
+        ALICE="temp_case/alice.txt"
+        BOB="temp_case/bob.txt"
+
+        # Function to prefix each line with a high-res timestamp + label
+        timestamp_lines() {
+          local label=$1
+          while IFS= read -r line; do
+            echo "[$(date +%s.%N)] [$label] $line"
+          done
+        }
+
+        python -u bob.py "$PORT" "$CIRCUIT" "$BOB" $FLAG 2>&1 | timestamp_lines BOB > bob.log &
+        BOB_PID=$!
+
+        python -u alice.py localhost "$PORT" "$CIRCUIT" "$ALICE" $FLAG 2>&1 | timestamp_lines ALICE > alice.log
+        wait $BOB_PID
+
+        cat bob.log alice.log | sort > merged.log
+        cat merged.log
