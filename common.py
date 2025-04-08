@@ -1,9 +1,16 @@
 import pickle
 import sys
 from typing import List
+import datetime
 
 from circuits.circuit import Circuit
 from circuits.elements import Terminal
+
+def log(message):
+    script = sys.argv[0]
+    """Timestamp with microseconds"""
+    timestamp = datetime.datetime.now().timestamp()
+    print(f"{timestamp:.6f} {script} | \t{message}")
 
 
 def next_line(file):
@@ -104,13 +111,12 @@ def read_object(sock, buffer_size=65000, verbose=False):
 
     if verbose:
         script = sys.argv[0]
-        print(f"{script} \t | Received object: {obj}")
-
+        log(f"Received object: {obj}")
     return obj
 
 def send_object(sock, obj, verbose=False):
     if verbose:
         script = sys.argv[0]
-        print(f"{script} | Sending object: {obj}")
+        log(f"Sending object: {obj}")
     data = pickle.dumps(obj)
     sock.sendall(data)

@@ -1,7 +1,7 @@
 import sys
 import socket
 
-from common import read_object, send_object, load_circuit_from_file, load_assignment_from_file
+from common import read_object, send_object, load_circuit_from_file, load_assignment_from_file, log
 from oblivious_transfer.oblivious_transfer import ObliviousTransfer
 
 script_name = sys.argv[0]
@@ -11,14 +11,14 @@ def get_connection(self_port):
     params = ("localhost", self_port)
     server.bind(params)
     server.listen(1)
-    print(f"{script_name} | Listening on port {self_port}")
+    log(f"Listening on port {self_port}")
     client, addr = server.accept()
-    print(f"{script_name} | Connection from {addr}")
+    log(f"Accepted connection from {addr}")
     return client
 
 def handle_args():
     if len(sys.argv) < 4:
-        print("Usage: python bob.py <bob_port> <circuit_file> <bob_assignment_file> [--verbose]")
+        log("Usage: python bob.py <bob_port> <circuit_file> <bob_assignment_file> [--verbose]")
         sys.exit(1)
 
     bob_port = int(sys.argv[1])
@@ -55,7 +55,7 @@ def recover_passwords(ciphertexts, sks, bob_assignment, verbose=False):
         input_passwords[terminal] = password
 
     if verbose:
-        print(f"{script_name} | Recovered passwords: {input_passwords}")
+        log(f"Received Passwords: {input_passwords}")
 
     return input_passwords
 
@@ -77,7 +77,8 @@ if __name__ == '__main__':
     bob_passwords = recover_passwords(ciphertexts, sks, bob_assignment, verbose=verbose)
     value = garbled_circuit.evaluate(bob_passwords)
 
-    print(f"{script_name} | Output: {value}")
+
+    log(f"Output: {value}")
 
 
 

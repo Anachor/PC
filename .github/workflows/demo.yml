@@ -70,18 +70,10 @@ jobs:
         ALICE="temp_case/alice.txt"
         BOB="temp_case/bob.txt"
 
-        # Function to prefix each line with a high-res timestamp + label
-        timestamp_lines() {
-          local label=$1
-          while IFS= read -r line; do
-            echo "[$(date +%s.%N)] [$label] $line"
-          done
-        }
-
-        python -u bob.py "$PORT" "$CIRCUIT" "$BOB" $FLAG 2>&1 | timestamp_lines BOB > bob.log &
+        python -u bob.py "$PORT" "$CIRCUIT" "$BOB" $FLAG 2>&1 > bob.log &
         BOB_PID=$!
 
-        python -u alice.py localhost "$PORT" "$CIRCUIT" "$ALICE" $FLAG 2>&1 | timestamp_lines ALICE > alice.log
+        python -u alice.py localhost "$PORT" "$CIRCUIT" "$ALICE" $FLAG 2>&1 > alice.log
         wait $BOB_PID
 
         cat bob.log alice.log | sort > merged.log

@@ -2,7 +2,7 @@ import sys
 import time
 from socket import socket
 
-from common import load_circuit_from_file, send_object, read_object, load_assignment_from_file
+from common import load_circuit_from_file, send_object, read_object, load_assignment_from_file, log
 from garbled_circuits.garbled_circuit import GarbledCircuit
 from oblivious_transfer.oblivious_transfer import ObliviousTransfer
 
@@ -13,17 +13,17 @@ def get_connection(host, port, max_retries=20, retry_delay=5):
     for _ in range(max_retries):
         try:
             client.connect((host, port))
-            print(f"{script_name} | Connected to {host}:{port}")
+            log(f"Connected to {host}:{port}")
             return client
         except ConnectionRefusedError:
-            print(f"{script_name} | Connection refused. Retrying in {retry_delay} seconds...")
+            log(f"Connection refused. Retrying in {retry_delay} seconds...")
             time.sleep(retry_delay)
 
     raise ConnectionError(f"Failed to connect to {host}:{port}")
 
 def handle_args():
     if len(sys.argv) < 5:
-        print("Usage: python alice.py <bob_host> <bob_port> <circuit_file> <assignment_file> [--verbose]")
+        log("Usage: python alice.py <bob_host> <bob_port> <circuit_file> <assignment_file> [--verbose]")
 
     bob_host = sys.argv[1]
     bob_port = int(sys.argv[2])
@@ -49,8 +49,7 @@ def alice2bob(circuit, alice_assignment, keys, bob_terminals, verbose=False):
     garbled_circuit = GarbledCircuit.garble(circuit, alice_assignment, passwords)
 
     if verbose:
-        print(f"{script_name} | Passwords: {passwords}")
-
+        log(f"Generated Passwords: {passwords}")
     ot = ObliviousTransfer(2)
     ciphertexts = [ot.alice_ot1(passwords[t], keys[i]) for i, t in enumerate(sorted(bob_terminals))]
     message = (ciphertexts, garbled_circuit)
