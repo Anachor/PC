@@ -124,3 +124,43 @@ Example:
 
 
 
+### Run via GitHub Actions
+
+A github action "Garbled Circuits Demonstration" is available. To run, go to the **Actions** tab, select **"Garbled Circuits Demonstration"** and click **“Run workflow”**. The inputs are:
+   - `testcase`: Name of the test (e.g., `millionaire2`, `millionaire4`, `mux`)
+   - `alice_inputs`: Alice's inputs. Use `\n` to separate lines. Example: "a1 1\na0 0"
+   - `bob_inputs`: Bob's input. Same format as above
+   - `verbose`: Optional, default is `true`
+
+There should be a folder './testcases/<testcase>/' with the a circuit.txt file describing the circuit. Three testcases are already provided in the `testcases` folder. The testcases are:
+- `millionaire2`: 2 bit millionaire problem
+- `millionaire4`: 4 bit millionaire problem
+- `mux`: 4 bit multiplexer
+
+To add a new testcase, create a folder with the name of the testcase and add a `circuit.txt` file with the description of the circuit. The format is the same as described above. All inputs should be assigned to exactly one of alice or bob.
+
+
+#### 🧾 Examples
+
+<details>
+<summary><strong>millionaire2</strong></summary>
+
+- `testcase`: `millionaire2`  
+- `alice_inputs`: `a1 1\na0 0`
+- `bob_inputs`: `b1 0\nb0 1`
+</details>
+
+<details>
+<summary><strong>millionaire4</strong></summary>
+
+- `testcase`: `millionaire4`
+- `alice_inputs`: `a3 1\na2 0\na1 1\na0 0`
+- `bob_inputs`: `b3 0\nb2 1\nb1 0\nb0 1`  
+</details>
+
+<details>
+<summary><strong>mux</strong></summary>
+- `testcase`: `mux`  
+- `alice_inputs`: `a0 1\na1 0\na2 1\na3 1`  
+- `bob_inputs`: `b0 1\nb1 0`  
+</details>

@@ -55,7 +55,7 @@ def recover_passwords(ciphertexts, sks, bob_assignment, verbose=False):
         input_passwords[terminal] = password
 
     if verbose:
-        log(f"Received Passwords: {input_passwords}")
+        log(f"Decoded Passwords: {input_passwords}")
 
     return input_passwords
 
