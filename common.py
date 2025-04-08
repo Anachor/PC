@@ -103,6 +103,10 @@ def load_assignment_from_file(file_path, terminals: List[Terminal]):
             if terminal_name in assignments:
                 raise ValueError(f"Terminal {terminal_name} already assigned")
             assignments[name2terminal[terminal_name]] = bool(int(assignment))
+    
+    if len(assignments) != len(name2terminal):
+        raise ValueError("Not all terminals have been assigned")
+
     return assignments
 
 def read_object(sock, buffer_size=65000, verbose=False):
