@@ -124,7 +124,7 @@ Example:
 
 
 
-### Run via GitHub Actions
+## Running via GitHub Actions
 
 A github action "Garbled Circuits Demonstration" is available. To run, go to the **Actions** tab, select **"Garbled Circuits Demonstration"** and click **“Run workflow”**. The inputs are:
    - `testcase`: Name of the test (e.g., `millionaire2`, `millionaire4`, `mux`)
